@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import { BiSolidBookOpen, BiSolidBookAdd, BiLogIn, BiLogOut } from 'react-icons/bi';
 import { asyncUnsetAuthUser } from '../states/authUser/action';
 
@@ -11,7 +12,13 @@ function Navigation() {
 
   const onSignOut = () => {
     dispatch(asyncUnsetAuthUser());
-
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'See you again!',
+      showConfirmButton: false,
+      timer: 1700,
+    });
     navigate('/login');
   };
   return (

@@ -8,6 +8,7 @@ import AddBookPage from './pages/AddBookPage';
 import EditBookPage from './pages/EditBookPage';
 import RegisterPage from './pages/RegisterPage';
 import DetailBookPage from './pages/DetailBookPage';
+import Loading from './components/Loading';
 
 function App() {
   const { authUser = null, isPreload = false } = useSelector((states) => states);
@@ -21,16 +22,22 @@ function App() {
   if (isPreload) {
     return null;
   }
+
   return (
     <>
+      <Loading />
       <main>
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
           <Route path="books/:bookId" element={<DetailBookPage />} />
-          <Route path="editbook/:bookId" element={<EditBookPage />} />
-          <Route path="addbook" element={<AddBookPage />} />
+          {authUser && (
+            <>
+              <Route path="editbook/:bookId" element={<EditBookPage />} />
+              <Route path="addbook" element={<AddBookPage />} />
+            </>
+          )}
+          {!authUser && <Route path="register" element={<RegisterPage />} />}
         </Routes>
       </main>
     </>

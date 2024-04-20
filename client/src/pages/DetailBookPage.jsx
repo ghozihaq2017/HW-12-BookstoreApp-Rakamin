@@ -2,19 +2,30 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Navigation from '../components/Navigation';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { asyncReceiveDetailThread } from '../states/detailBook/action';
 import { BiSolidEdit, BiSolidTrash } from 'react-icons/bi';
 import { asyncRemoveBook } from '../states/books/action';
+import Swal from 'sweetalert2';
 
 function DetailBookPage() {
   const detailBook = useSelector((states) => states.detailBook);
+  const authUser = useSelector((states) => states.authUser);
   const { bookId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onDeleteBook = () => {
     // Kirim permintaan penghapusan buku
     dispatch(asyncRemoveBook(parseInt(bookId)));
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'The book has been successfully deleted',
+      showConfirmButton: false,
+      timer: 1700,
+    });
+    navigate('/');
   };
 
   useEffect(() => {
@@ -48,17 +59,18 @@ function DetailBookPage() {
               <p className="text-sm leading-6">{`Pages: ${detailBook.pages}`}</p>
               <p className="text-sm leading-6">{`Year: ${detailBook.year}`}</p>
             </div>
-
-            <div className="buttons-action flex mt-5">
-              <Link to={`/editbook/${detailBook.id}`} className="btn btn-primary text-white w-36">
-                <BiSolidEdit />
-                Edit
-              </Link>
-              <button className="btn btn-error text-white ml-5 w-36" onClick={onDeleteBook}>
-                <BiSolidTrash />
-                Delete
-              </button>
-            </div>
+            {authUser && (
+              <div className="buttons-action flex mt-5">
+                <Link to={`/editbook/${detailBook.id}`} className="btn btn-primary text-white w-36">
+                  <BiSolidEdit />
+                  Edit
+                </Link>
+                <button className="btn btn-error text-white ml-5 w-36" onClick={onDeleteBook}>
+                  <BiSolidTrash />
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

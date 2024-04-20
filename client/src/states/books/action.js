@@ -1,3 +1,4 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../utils/api';
 
 const ActionType = {
@@ -46,17 +47,20 @@ function removeBookActionCreator(bookId) {
 
 function asyncReceiveBooks() {
   return async (dispatch) => {
+    dispatch(showLoading());
     try {
       const books = await api.getAllBooks();
       dispatch(receiveBooksActionCreator(books));
     } catch (error) {
       alert(error.message);
     }
+    dispatch(hideLoading());
   };
 }
 
 function asyncAddBook(formData) {
   return async (dispatch) => {
+    dispatch(showLoading());
     try {
       const book = await api.addBook(formData);
       dispatch(addBookActionCreator(book));
@@ -64,23 +68,13 @@ function asyncAddBook(formData) {
       console.error('Error while adding book:', error);
       throw error;
     }
+    dispatch(hideLoading());
   };
 }
 
-// function asyncUpdateBook({ id, title, author, publisher, year, pages }) {
-//   return async (dispatch) => {
-//     try {
-//       console.log(id, title, author, publisher, year, pages);
-//       const updatedBook = await api.editBook(id, { title, author, publisher, year, pages });
-//       dispatch(updateBookActionCreator(id, updatedBook));
-//     } catch (error) {
-//       alert(error.message);
-//     }
-//   };
-// }
-
 function asyncUpdateBook({ id, title, author, publisher, year, pages }) {
   return async (dispatch) => {
+    dispatch(showLoading());
     try {
       const updatedBook = await api.editBook({ id, title, author, publisher, year, pages });
 
@@ -89,22 +83,23 @@ function asyncUpdateBook({ id, title, author, publisher, year, pages }) {
       }
 
       dispatch(updateBookActionCreator(id, updatedBook));
-      console.log('Masok2');
-      alert('Buku berhasil diperbarui');
     } catch (error) {
       alert(error.message || 'Gagal memperbarui buku');
     }
+    dispatch(hideLoading());
   };
 }
 
 function asyncRemoveBook(bookId) {
   return async (dispatch) => {
+    dispatch(showLoading());
     try {
       await api.deleteBook(bookId);
       dispatch(removeBookActionCreator(bookId));
     } catch (error) {
       alert(error.message);
     }
+    dispatch(hideLoading());
   };
 }
 

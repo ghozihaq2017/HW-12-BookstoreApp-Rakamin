@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import useInput from '../hooks/useInput';
 import NovelStuck from '../assets/img/novel-stuck.jpeg';
 import { asyncAddBook, asyncUpdateBook } from '../states/books/action';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function NovelForm({ bookData }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -15,6 +16,7 @@ function NovelForm({ bookData }) {
   const [pages, onPagesChange] = useInput(bookData ? bookData.pages : '');
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { bookId } = useParams();
 
@@ -32,9 +34,16 @@ function NovelForm({ bookData }) {
     formData.append('pages', pages);
     formData.append('image', selectedImage.file);
 
-    dispatch(asyncAddBook(formData))
+    dispatch(asyncAddBook(formData));
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'The book has been successfully created',
+      showConfirmButton: false,
+      timer: 1700,
+    });
+    navigate('/')
       .then(() => {
-        alert('Buku berhasil ditambahkan');
         resetForm();
       })
       .catch((error) => {
@@ -75,14 +84,21 @@ function NovelForm({ bookData }) {
       title: title,
       author: author,
       publisher: publisher,
-      year: year,
-      pages: pages,
+      year: parseInt(year),
+      pages: parseInt(pages),
     };
-    // console.log(bookUpdateData);
 
-    dispatch(asyncUpdateBook(bookUpdateData))
+    dispatch(asyncUpdateBook(bookUpdateData));
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'The book has been successfully updated',
+      showConfirmButton: false,
+      timer: 1700,
+    });
+    navigate('/')
       .then(() => {
-        alert('Buku berhasil diupdate');
+        console.log('Buku berhasil diupdate');
       })
       .catch((error) => {
         console.log('Gagal memperbarui buku:', error.message);
@@ -188,6 +204,7 @@ function NovelForm({ bookData }) {
           </button>
         ) : (
           <button
+            type="button"
             className="btn bg-darkblue hover:bg-primary mt-5 w-full max-w-lg border-0 text-white"
             onClick={onAddBook}
           >

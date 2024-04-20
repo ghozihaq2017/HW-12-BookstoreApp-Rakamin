@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncSetAuthUser } from '../states/authUser/action';
 import { BiSolidBookBookmark } from 'react-icons/bi';
+import Swal from 'sweetalert2';
 import LoginInput from '../components/LoginInput';
 import bookstore from '../assets/img/bookstore.jpeg';
 
@@ -17,6 +18,13 @@ function LoginPage() {
 
   useEffect(() => {
     if (authUser) {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Welcome to Novelnest',
+        showConfirmButton: false,
+        timer: 1700,
+      });
       navigate('/');
     }
   }, [authUser, navigate]);

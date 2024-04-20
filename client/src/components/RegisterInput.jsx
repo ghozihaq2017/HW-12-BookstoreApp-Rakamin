@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { asyncRegisterUser } from '../states/authUser/action';
@@ -20,6 +21,14 @@ function RegisterInput() {
       return;
     }
     dispatch(asyncRegisterUser({ name, email, password }));
+
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'You have successfully registered',
+      showConfirmButton: false,
+      timer: 1700,
+    });
 
     navigate('/login');
   };

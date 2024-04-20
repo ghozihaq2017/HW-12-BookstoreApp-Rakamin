@@ -70,7 +70,7 @@ const api = (() => {
     try {
       const response = await fetchWithToken(`${BASE_URL}/books`, {
         method: 'POST',
-        body: bookData, // Kirim FormData langsung
+        body: bookData,
       });
 
       const responseJson = await response.json();
@@ -128,7 +128,6 @@ const api = (() => {
       });
 
       const responseJson = await response.json();
-      console.log(responseJson);
 
       const { book } = responseJson;
 
